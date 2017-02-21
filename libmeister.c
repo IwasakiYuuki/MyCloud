@@ -28,14 +28,16 @@ int in_pin[SENSOR_NUM];
 
 void Init_pins(void){
 	
-	for(int i=0;i<SENSOR_NUM;i++){
+	int i=0;
+
+	for(i=0;i<SENSOR_NUM;i++){
 		out_pin[i]=0;
 		in_pin[i]=0;
 	}
 	return;
 }
 
-int MyDisplay(SDL_BiltSurface *screen,SDL_Rect rt_dest,IplImage *img){
+int MyDisplay(SDL_Surface *screen,SDL_Rect rt_dest,IplImage *img){
 	
 	img=(IplImage *)cvLoadImage(FILENAME,2|-1);
 	
@@ -52,18 +54,9 @@ int MyDisplay(SDL_BiltSurface *screen,SDL_Rect rt_dest,IplImage *img){
 		0x00ff0000,0x0000ff00,0x000000ff,0
 	);
 		
-	if(SDL_BlitSurface(sdl_img,NULL,screen,&rt_dest)!=0){
-		printf("ERROR:failed SDL_BlitSurface()...\n");
-		return -1;
-	}
-	if(SDL_UpdateRect(screen,0,0,img->width,img->height)!=0){
-		printf("ERROR:failed SDL_UpdateRect()...\n"):
-		return -1;
-	}
-	if(SDL_Flip(screen)!=0){
-		printf("ERROR:failed SDL_Flip()...\n");
-		return -1;
-	}
+	SDL_BlitSurface(sdl_img,NULL,screen,&rt_dest)
+	SDL_UpdateRect(screen,0,0,img->width,img->height)
+	SDL_Flip(screen)
 	
 	retunrn 0;
 }
@@ -72,8 +65,9 @@ int MyDisplay(SDL_BiltSurface *screen,SDL_Rect rt_dest,IplImage *img){
 void notification_dis(int *num,int *out,int *in){
 //　シングルスレッドの処理	
 	double distance;
+	int i=0;
 
-	for(int i=0;i<SENSOR_NUM;i++){
+	for(i=0;i<SENSOR_NUM;i++){
 		distance=read_dis(out[i],in[i]);
 		if(distance<DENGER_DISTANCE)
 			*num=1;
