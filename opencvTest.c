@@ -38,7 +38,7 @@ int main(){
 	return 0;
 }
 
-static int MyDisplay(SDL_BiltSurface *screen,SDL_Rect rt_dest,IplImage *img){
+static int MyDisplay(SDL_Surface *screen,SDL_Rect rt_dest,IplImage *img){
 	
 	img=(IplImage *)cvLoadImage(FILENAME,2|-1);
 	
