@@ -36,12 +36,13 @@ int main(){
 	SDL_Event e;
 	SDL_Surface *screen;
 
+	len=sizeof(client);
+	sock_cl=accept(sock_my,(struct sockaddr *)&client,&len);
+	screen=SDL_SetVideoMode(854,480,32,SDL_HWSURFACE|SDL_FULLSCREEN);
+	
 	while(1){
-		len=sizeof(client);
-		sock_cl=accept(sock_my,(struct sockaddr *)&client,&len);
 
 		SDL_Init(SDL_INIT_EVERYTHING);
-		screen=SDL_SetVideoMode(1920,1080,32,SDL_HWSURFACE|SDL_FULLSCREEN);
 
 		if((fp_w=fopen(FILENAME,"wb"))<0){
 			printf("ERROR:can't open file...");
@@ -59,10 +60,10 @@ int main(){
                                 return -1;
                         }
                 }
-		close(sock_cl);
 		fclose(fp_w);
 	}
 	close(sock_my);
+	close(sock_cl);
 	return 0;
 }
 
