@@ -22,6 +22,8 @@ int main(){
 	int size;
 	FILE *fp_w;
 	socklen_t len;
+	fd_set sock_wait;
+	struct timeval tv;
 
 	sock_my=socket(AF_INET,SOCK_STREAM,0);
 
@@ -36,19 +38,28 @@ int main(){
 	SDL_Event e;
 	SDL_Surface *screen;
 
-	len=sizeof(client);
-	sock_cl=accept(sock_my,(struct sockaddr *)&client,&len);
-	screen=SDL_SetVideoMode(854,480,32,SDL_HWSURFACE|SDL_FULLSCREEN);
 	
+	FD_ZERO(&sock_wait);
+	FD_SET(sock_my,&sock_wait);
+	
+	tv.tv_sec=20;
+	tv.tv_usec=0;
+
+	SDL_Init(SDL_INIT_EVERYTHING);
+	screen=SDL_SetVideoMode(1920,1080,32,SDL_HWSURFACE|SDL_FULLSCREEN);
+
 	while(1){
 
-		SDL_Init(SDL_INIT_EVERYTHING);
-
+		len=sizeof(client);
+		sock_cl=accept(sock_my,(struct sockaddr *)&client,&len);
 		if((fp_w=fopen(FILENAME,"wb"))<0){
 			printf("ERROR:can't open file...");
-			return 0;
+			return -1;
 		}
-
+		if(select(sock_my,&sock_wait,NULL,NULL,&tv)==0){
+			return -1;
+		}
+		
 		while(1){
 			size=read(sock_cl,buf,sizeof(buf));
 			if(size<=0)break;
@@ -57,13 +68,13 @@ int main(){
 		MyDisplay(screen);
                 if(SDL_PollEvent(&e)==1){
                         if(e.type==SDL_KEYDOWN){
-                                return -1;
+                        	break;
                         }
                 }
 		fclose(fp_w);
+		close(sock_cl);
 	}
 	close(sock_my);
-	close(sock_cl);
 	return 0;
 }
 
