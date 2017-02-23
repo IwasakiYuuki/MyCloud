@@ -12,8 +12,8 @@
 #include <memory.h>
 #include <jpeglib.h>
 
-#define PORT (in_port_t)50000
-#define FILENAME "map_capture.jpeg"
+//#define PORT (in_port_t)50000
+//#define FILENAME "map_capture.bmp"
 
 
 int main(){
@@ -53,8 +53,8 @@ int main(){
 		FD_ZERO(&sock_wait);
 		FD_SET(sock_cl,&sock_wait);
 		
-		tv.tv_sec=1;
-		tv.tv_usec=0;
+		tv.tv_sec=0;
+		tv.tv_usec=500000;
 		
 		if((fp_w=fopen(FILENAME,"wb"))<0){
 			printf("ERROR:can't open file...");
