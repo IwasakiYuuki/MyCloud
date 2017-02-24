@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "libfuffafo.h"
+
+/*
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -11,6 +13,7 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <jpeglib.h>
+*/
 
 //#define PORT (in_port_t)50000
 //#define FILENAME "map_capture.bmp"
@@ -44,7 +47,7 @@ int main(){
 	
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-	screen=SDL_SetVideoMode(1920,1080,32,SDL_HWSURFACE|SDL_FULLSCREEN);
+	screen=SDL_SetVideoMode(854,480,32,SDL_HWSURFACE|SDL_FULLSCREEN);
 
 	while(1){
 		rstart:
@@ -69,9 +72,8 @@ int main(){
 
 			if(size<=0){
 				if((result=select(sock_cl+1,&sock_wait,NULL,NULL,&tv))==0){
-					goto rstart;
+					break;
 				}else if(result<0){
-					perror("select()");
 					goto rstart;
 				}else{
 					size=recv(sock_cl,buf,sizeof(char),0);
@@ -85,7 +87,7 @@ int main(){
 		}
 		fwrite((char *)0xFFD9,(unsigned int)2,1,fp_w);
 		fclose(fp_w);
-//		process_cap();
+		process_cap();
 
 		MyDisplay(screen);
                 if(SDL_PollEvent(&e)==1){
