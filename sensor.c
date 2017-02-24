@@ -52,7 +52,7 @@ int main(){
 				offLED();
 			}
 		}
-		sleep(0.05);
+		sleep(0.03);
 	}
 //ここからはセンサーの距離測定＆判断の処理
 
@@ -91,8 +91,11 @@ double read_dis(int out_pin,int in_pin){
 	//信号受信、時間測定
 	pinoff=clock();
 	while(digitalRead(in_pin)==0)pinoff=clock();
-	while(digitalRead(in_pin)==1)pinon=clock();
-	
+	while(digitalRead(in_pin)==1){
+		pinon=clock();
+		if(((pinon-pinoff)/CLOCKS_PER_SEC)>0.017647)return (double)300;
+	}
+
 	return ((pinon-pinoff)/CLOCKS_PER_SEC)*(double)17000;
 }
 
