@@ -17,7 +17,7 @@
 #define LED_PIN_4 23
 
 
-#define DENGER_DISTANCE 80
+#define DENGER_DISTANCE 70
 
 double read_dis(int out_pin,int in_pin);
 void notification_dis(int *num,int *out,int *in);
@@ -102,12 +102,11 @@ void notification_dis(int *num,int *out,int *in){
 	double distance,sum=0;
 	int i=0;
 
-	while(i<10){
+	for(i=0;i<20;i++){
 		sum+=read_dis(out[0],in[0]);
 		sum+=read_dis(out[1],in[1]);
-		i++;
 	}
-	sum=sum/20;
+	sum=sum/40;
 	printf("dis  : %f\n",sum);
 	for(i=0;i<SENSOR_NUM;i++){
 		if(sum<DENGER_DISTANCE)
